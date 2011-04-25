@@ -1,0 +1,160 @@
+* {
+   padding:0; margin:0; list-style:none;
+}
+
+html,body {
+   height:100%;
+}
+body {
+   font-family:Helvetica,Arial,sans-serif;
+}
+
+#container {
+   height:100%;
+   overflow:hidden;
+   background:white;
+}
+
+#modules-container {
+   width:27%;
+   height:100%;
+   position:relative;
+   float:left;
+   background:rgba(25,25,25,0.3);
+   -webkit-box-shadow:0px 0px 5px rgba(0,0,0,0.7);
+   z-index:5;
+   overflow:hidden;
+   background:white url(/img/background.jpeg);
+}
+#functions-container {
+   width:73%;
+   height:100%;
+   float:right;
+   position:relative;
+   background:white url(/img/battle.jpeg) no-repeat center center;
+   z-index:0;
+   overflow:hidden;
+}
+
+.title {
+/*   position:absolute;
+   top:0px; left:0px;*/
+   width:100%;
+   z-index:100;
+   background:white;
+   font-family:Georgia,serif;
+   font-style:italic;
+   -webkit-box-shadow:0px 0px 5px rgba(0,0,0,0.7);
+   height:6%;
+   position:relative;
+   border-top:2px solid #ddd;
+}
+.title span {
+   padding:10px 15px;
+   display:block;
+   font-size:12px;
+}
+
+.title span.directory {
+   color:rgb(29,130,124);
+   position:absolute;
+   top:0px; right:0px;
+}
+
+.scroll-container {
+   height:100%;
+}
+
+ul#modules {
+   height:94%;
+   overflow:auto;
+}
+
+#modules li {
+   background:rgba(65,65,65,0.9);
+   -webkit-box-shadow:0px 0px 4px rgba(0,0,0,0.3);
+   color:#333;
+   padding-bottom:5px;
+   margin:5px;
+   background:rgba(240,255,250,0.9);
+}
+#modules li .padding {
+   padding:10px;
+}
+
+span.name {
+   display:block;
+   color:rgb(29,130,124);
+   font-weight:bold;
+   border-bottom:1px solid rgba(29,130,124,0.3);
+   font-size:18px;
+   padding:0px 0px 5px 5px;
+   margin-bottom:5px;
+}
+span.version {
+   display:block;
+   color:rgb(255,79,19);
+   font-size:12px;
+   font-family:monospace;
+   padding:5px;
+}
+a.repository {
+   font-size:11px;
+   color:royalblue;
+   font-weight:bold;
+   margin:25px 5px 5px 5px;
+   display:block;
+   text-decoration:none;
+}
+
+#modules p {
+   font-family:Georgia,serif;
+   font-style:italic;
+   color:#555;
+   font-size:12px;
+   padding:5px;
+}
+
+
+#function-scroller {
+   height:94%;
+   overflow:auto;
+   background:rgba(25,25,25,0.3);
+}
+
+ul#functions {
+   padding:15px 5px;
+}
+
+ul#functions li {
+   padding:15px 15px;
+   margin:5px;
+   text-align:right;
+}
+
+span.fn {
+   font-weight:bold;
+   font-size:14px;
+   background:rgba(255,255,255,0.8);
+   padding:15px 75px 15px 75px;
+   color:royalblue;
+}
+em.money {
+   color:white;
+   font-style:normal;
+   text-shadow:0px 0px 1px rgba(0,0,0,0.3);
+}
+
+::-webkit-scrollbar {
+   width: 5px;
+   height: 5px;
+   background:#aaa;
+}
+
+::-webkit-scrollbar-track-piece  {
+   background-color: #ddd;
+}
+
+::-webkit-scrollbar-thumb {
+   background-color: #bbb;
+}

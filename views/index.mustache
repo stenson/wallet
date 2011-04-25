@@ -1,0 +1,32 @@
+<div id="modules-container">
+  <div class="scroll-container">
+    <div class="title">
+      <span>Your Modules</span>
+    </div>
+    <ul id="modules">
+    {{#modules}}
+      <li>
+        <div class="padding">
+          <span class="name">{{ name }}</span>
+          <span class="version">{{ version }}</span>
+          <p>{{ description }}</p>
+          <a class="repository" target="_blank" href="{{ homepage }}">source</a>
+        </div>
+      </li>
+    {{/modules}}
+    </ul>
+    <div id="add">
+      Add a module to your ender
+    </div>
+  </div>
+</div>
+<div id="functions-container">
+  <div class="title">
+    <span>Your Functions</span>
+    <span class="directory">{{ directory }}</span>
+  </div>
+  <div id="function-scroller">
+    <ul id="functions">
+    </ul>
+  </div>
+</div>
