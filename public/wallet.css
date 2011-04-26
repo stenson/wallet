@@ -37,8 +37,6 @@ body {
 }
 
 .title {
-/*   position:absolute;
-   top:0px; left:0px;*/
    width:100%;
    z-index:100;
    background:white;
@@ -48,6 +46,7 @@ body {
    height:6%;
    position:relative;
    border-top:2px solid #ddd;
+   border-bottom:1px solid #eee;
 }
 .title span {
    padding:10px 15px;
@@ -107,6 +106,10 @@ a.repository {
    text-decoration:none;
 }
 
+#modules pre {
+  display:none;
+}
+
 #modules p {
    font-family:Georgia,serif;
    font-style:italic;
@@ -115,6 +118,19 @@ a.repository {
    padding:5px;
 }
 
+#searchbox {
+   position:absolute;
+   top:75px;
+   left:25px;
+}
+
+#livesearch {
+   font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+   color:#aaa;
+   padding:5px;
+   font-size:14px;
+   font-weight:bold;
+}
 
 #function-scroller {
    height:94%;
@@ -127,22 +143,82 @@ ul#functions {
 }
 
 ul#functions li {
-   padding:15px 15px;
+   padding:8px 8px;
    margin:5px;
    text-align:right;
 }
 
+#functions pre {
+   text-align:left;
+}
+
+span.notice {
+  padding:10px 55px 10px 55px;
+  font-family:Georgia,serif;
+  font-style:italic;
+  font-size:12px;
+}
+
 span.fn {
    font-weight:bold;
-   font-size:14px;
-   background:rgba(255,255,255,0.8);
-   padding:15px 75px 15px 75px;
-   color:royalblue;
+   font-size:18px;
+   background:rgba(255,255,255,0.5);
+   padding:10px 55px 10px 55px;
+   color:rgb(29,130,124);
+   -webkit-box-shadow:0px 0px 1px rgba(0,0,0,0.1);
+   -webkit-border-radius:1px;
+   cursor:pointer;
 }
-em.money {
+span.fn:hover {
+   background:rgba(255,255,255,0.9);
+}
+span.fn.open {
+   background:rgba(240,255,250,0.9);
+}
+
+span.fn em {
+   color:white;
+   font-weight:normal;
+   font-style:normal;
+}
+
+span.fn em.money {
    color:white;
    font-style:normal;
-   text-shadow:0px 0px 1px rgba(0,0,0,0.3);
+}
+span.fn:hover em.money {
+   color:rgb(255,79,19);
+}
+
+div.info {
+   display:none;
+   background:rgba(255,255,255,0.8);
+   padding:0px 0px 0px 5px;
+   text-align:left;
+}
+div.info.visible {
+   display:block;
+}
+
+div.info div.docs {
+   padding:10px 3px;
+   border-bottom:3px solid #ccc;
+}
+
+div.info span.owner {
+  font-size:12px;
+  font-family:monospace;
+  color:white;
+  background:rgb(255,79,19);
+  -webkit-border-radius:3px;
+  padding:5px;
+}
+
+div.info pre {
+  background:rgba(0,0,0,0.7);
+  overflow:scroll;
+  color:white;
+  padding:15px;
 }
 
 ::-webkit-scrollbar {
@@ -157,4 +233,22 @@ em.money {
 
 ::-webkit-scrollbar-thumb {
    background-color: #bbb;
+   background-color:rgb(59,170,154);
+}
+
+/* syntax highlighting */
+.number {
+  color:#ffff44;
+}
+
+.keyword {
+  color: #219195;
+}
+
+.string {
+  color: #fa524f;
+}
+
+.comment {
+  color: #aaaaaa;
 }

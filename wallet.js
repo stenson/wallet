@@ -1,7 +1,7 @@
 var express = require("express"),
-  fs = require("fs"),
+  colors = require("colors"),
   app = express.createServer(),
-  exec = require('child_process').exec;
+  read = require("./read").read;
 
 // stache enabling
 app.set('view engine', 'mustache');
@@ -12,45 +12,16 @@ app.register(".mustache", require("stache"));
 app.use(express.static(__dirname + '/public'));
 app.use(express.favicon());
 
-var utils = {
-  clean: function(stuff) {
-    // get rid of the color tags
-    return stuff.replace(/\[\d\d\w/g,"");
-  }
-};
-
 var cache = [];
+read(function(scripts){
+  cache = scripts.map(function(script){
+    var info = script[2];
+    info.source = script[1];
+    return info;
+  });
+});
 
-// interface to ender
-var ender = {
-  list: function() {
-    exec("ender list",function(err,out,stderr){
-      if(err) throw err;
-      var clean = utils.clean(out);
-      clean.split("\n").forEach(function(line){
-        if(line.indexOf("@") > -1) {
-          var name = line.match(/[\w]+/)[0];
-          ender.npmInfo(name,function(data){
-            cache.push(data);
-          });
-        }
-      });
-    });
-  },
-  npmInfo: function(name,callback) {
-    // borrowed from ender.npm
-    exec("npm info "+name,function(err,out,stderr){
-      if (err) throw err;
-      var info;
-      eval('info = ' + out);
-      callback(info);
-    });
-  }
-}
-
-ender.list();
-
-// basic list function
+// the only route, other than static stuff
 app.get("/",function(req,res){
   res.render("index",{
     locals: {
@@ -60,16 +31,5 @@ app.get("/",function(req,res){
   });
 });
 
-app.get("/log",function(req,res){
-  console.log(cache);
-  res.send("logged");
-})
-
-app.get("/ender.js",function(req,res){
-  // this isn't getting the right one, does that make sense?
-  fs.readFile(process.cwd()+"/ender.js", "utf-8", function (err,data){
-    res.send(data);
-  });
-});
-
 app.listen(1987);
+console.log("\n\nHowdy! See what's in yer $ at localhost:1987\n\n".green);
