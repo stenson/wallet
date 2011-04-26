@@ -126,10 +126,11 @@ a.repository {
 
 #livesearch {
    font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
-   color:#aaa;
-   padding:5px;
-   font-size:14px;
+   color:#ccc;
+   padding:7px;
+   font-size:16px;
    font-weight:bold;
+   width:300px;
 }
 
 #function-scroller {
@@ -153,10 +154,11 @@ ul#functions li {
 }
 
 span.notice {
-  padding:10px 55px 10px 55px;
+  padding:30px 55px 20px 55px;
   font-family:Georgia,serif;
   font-style:italic;
-  font-size:12px;
+  font-size:14px;
+  display:block;
 }
 
 span.fn {

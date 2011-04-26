@@ -89,6 +89,8 @@ MONEY.domReady(function(){
     MONEY.map(funcs.proto,MONEY.bind(build,null,'$("").')).join("")
   ].join(""));
   
+  var funcItems = functions.find("span.fn strong");
+  
   doHijs(); // syntax highlighting
   
   // loading two enders appears to break all these functions
@@ -109,6 +111,15 @@ MONEY.domReady(function(){
     toggleClass(src,"open");
   });
   
+  var filterFuncs = function(search) {
+    MONEY.each(funcItems,function(func){
+      var show = func.innerHTML.toLowerCase().indexOf(search) >= 0,
+        parent = func.parentNode.parentNode;
+      parent.style.display = (show) ? "block" : "none";
+    });
+  };
   // livesearching
-  
+  MONEY("input").keyup(function(){
+    filterFuncs(this.value.toLowerCase());
+  });
 });
