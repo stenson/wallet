@@ -4,8 +4,10 @@ var fs = require("fs"),
   exec = require("child_process").exec,
   ender = {
     get: require("ender/lib/ender.get"),
-    file: require("ender/lib/ender.file")
+    file: require("ender/lib/ender.file"),
+    jeesh: require("ender/lib/ender.jeesh")
   },
+  // borrowed from ender
   commonJSBridge = { head: '!function () { var module = { exports: {} }; '
                    , foot: ' $.ender(module.exports); }();' }
 
@@ -61,10 +63,18 @@ module.exports = {
   read: function(callback) {
     ender.get.buildHistory(function(packages){
       var packs = packages.split(" ").slice(2);
-      packs.unshift("ender-js")
+      if(packs[0] === "jeesh") {
+        packs = ender.jeesh;
+      }
+      packs.unshift("ender-js");
       processPackages(packs,false,function(scripts){
         callback(scripts);
       });
+    });
+  },
+  getSize: function(callback) {
+    ender.file.enderSize(function(size){
+      callback(((Math.round((size/1024) * 10) / 10)));
     });
   }
 }

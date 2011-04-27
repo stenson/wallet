@@ -2,6 +2,7 @@
   <div class="scroll-container">
     <div class="title">
       <span>Your Modules</span>
+      <div id="add-a-module"></div>
     </div>
     <ul id="modules">
     {{#modules}}
@@ -11,41 +12,52 @@
           <span class="version">{{ version }}</span>
           <p>{{ description }}</p>
           <a class="repository" target="_blank" href="{{ homepage }}">docs &amp; source</a>
+          <a class="delete {{ name }}" href="/remove/{{ name }}">Delete this module</a>
           <script> {{{ source }}} </script>
-          <script> introspect.diff("{{ name }}"); </script>
+          <script>
+            // check on what functions are new in the $ variable
+            introspect.diff("{{ name }}");
+          </script>
         </div>
       </li>
     {{/modules}}
     </ul>
-    <script> introspect.cull() </script>
+    <script>
+      // sort everything out now that we know who owns what
+      introspect.cull()
+    </script>
     <div id="add">
       Add a module to your ender
     </div>
   </div>
 </div>
 <div id="functions-container">
-  <script type="text/ender-template" id="template">
-    <li>
-      <span class="<%= extraClass %>">
-        <em class="money"><%= prefix %></em>
-        <strong><%= name %> <%= aliases %></strong>
-      </span>
-      <div class="info">
-        <div class="docs">
-          <span class="owner"><%= owner %></span>
-        </div>
-        <pre><code><%= func %></code></pre>
-      </div>
-    </li>
-  </script>
   <div id="searchbox">
-    <input type="text" id="livesearch" value="Search yer functions"/>
+    <input type="text" id="livesearch" value="Search those functions"/>
   </div>
+  <h3 id="size">
+    Size: {{ size }}kb
+  </h3>
   <div class="title">
     <span>Your Functions</span>
     <span class="directory">{{ directory }}</span>
   </div>
   <div id="function-scroller">
+    <!-- template for rendering a function list item -->
+    <script type="text/ender-template" id="template">
+      <li>
+        <span class="<%= extraClass %>">
+          <em class="money"><%= prefix %></em>
+          <strong><%= name %> <%= aliases %></strong>
+        </span>
+        <div class="info">
+          <div class="docs">
+            <span class="owner"><%= owner %></span>
+          </div>
+          <pre><code><%= func %></code></pre>
+        </div>
+      </li>
+    </script>
     <ul id="functions">
     </ul>
   </div>

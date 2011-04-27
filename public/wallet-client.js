@@ -1,9 +1,12 @@
+// code for figuring out who owns what functions
+
 var introspect = (function(){
   
   var annotated = {
       top: {}, // top-level functions
       proto: {} // functions on the prototype
     },
+    codes = {},
     testProto = null,
     funcs = {}, // final records, written by cull
     record = function(owner,func,name) {
@@ -15,6 +18,9 @@ var introspect = (function(){
   
   return {
     diff: function(owner) {
+      // var scripts = document.getElementsByTagName("script"),
+      //   mostRecent = scripts[scripts.length-2],
+      //   code = mostRecent.innerHTML;
       // need something with a __proto__
       if(!testProto) {
         testProto = $("div").__proto__;
@@ -59,10 +65,16 @@ var introspect = (function(){
         top: introspect.alphabetize(funcs.top),
         proto: introspect.alphabetize(funcs.proto)
       };
+    },
+    codes: function() {
+      var parsedCodes = [];
+      return codes;
     }
   }
   
 })();
+
+// code for displaying stuff
 
 function buildEntry(template,prefix,record,extraClass) {
   var als = record.aliases || [];
@@ -111,15 +123,36 @@ MONEY.domReady(function(){
     toggleClass(src,"open");
   });
   
-  var filterFuncs = function(search) {
-    MONEY.each(funcItems,function(func){
-      var show = func.innerHTML.toLowerCase().indexOf(search) >= 0,
-        parent = func.parentNode.parentNode;
-      parent.style.display = (show) ? "block" : "none";
-    });
-  };
   // livesearching
-  MONEY("input").keyup(function(){
-    filterFuncs(this.value.toLowerCase());
+  MONEY("input")
+    .focus(function(){
+      MONEY(this).addClass("typing");
+      if(this.value === this.defaultValue) {
+        this.value = "";
+      }
+    })
+    .blur(function(){
+      if(this.value === "") {
+        this.value = this.defaultValue;
+        this.className = "";
+      }
+    })
+    .keyup(function(){
+      var search = this.value.toLowerCase();
+      // run through and hide what doesn't match
+      MONEY.each(funcItems,function(func){
+        var show = func.innerHTML.toLowerCase().indexOf(search) >= 0,
+          parent = func.parentNode.parentNode;
+        parent.style.display = (show) ? "block" : "none";
+      });
+    });
+  
+  // so you want to add a module?
+  // (this is the hackiest thing here, will get much better)
+  MONEY("#add-a-module").click(function(){
+    var module = prompt("... what do you want to add?");
+    if(module) {
+      window.location.href = "/add/"+module;
+    }
   });
 });
