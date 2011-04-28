@@ -18,3 +18,4 @@ Also there's an ender build right in the git repo, so you can look at that too. 
     
 To convince you to try it, here's a screenshot:
 
+<img src="https://github.com/stenson/wallet/raw/master/screenshot.png"/>
