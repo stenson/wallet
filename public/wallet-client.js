@@ -156,7 +156,8 @@ MONEY.domReady(function(){
   });
   // get rid of the popover if you click anywhere other than the main box
   moduleScreen.click(function(e){
-    if(e.srcElement == this) {
+    var target = e.target || e.srcElement;
+    if(target == this) {
       moduleScreen.css("visibility","hidden");
     }
   });
