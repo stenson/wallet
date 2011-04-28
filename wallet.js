@@ -21,7 +21,7 @@ app.get("/",function(req,res){
       cache = scripts.map(function(script,i){
         var info = script[2];
         info.source = script[1];
-        if(info.name == "ender-js") enderJSPos = i;
+        if(info.name == "ender-js") enderPos = i;
         return info;
       });
     // need to make sure ender-js shows up first
