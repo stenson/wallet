@@ -63,13 +63,20 @@
   </div>
 </div>
 <!-- hidden div for adding a module -->
-<div id="add-a-module-popup">
-  <!-- {{ unusedJeesh }} -->
-  <ul>
-    {{#unusedJeesh}}
-    <li>
-      <span>{{ name }}</span>
-    </li>
-    {{/unusedJeesh}}
-  </ul>
+<div id="add-popup">
+  <div id="popup-stuff">
+    <div id="add-form">
+      <form>
+        <input type="text" id="arbitrary" value="Add any module by name, hit enter"/>
+      </form>
+    </div>
+    <h3 class="message">{{ jeeshNotice }}</h3>
+    <ul>
+      {{#unusedJeesh}}
+      <li>
+        <a href="/add/{{ name }}">{{ name }}</a>
+      </li>
+      {{/unusedJeesh}}
+    </ul>
+  </div>
 </div>

@@ -12,7 +12,6 @@ app.register(".mustache", require("stache"));
 
 // public folder enabling
 app.use(express.static(__dirname + '/public'));
-app.use(express.favicon());
 
 // the only visible route, other than static stuff and the ajax stuff
 app.get("/",function(req,res){
@@ -27,11 +26,12 @@ app.get("/",function(req,res){
     // need to make sure ender-js shows up first
     if(enderPos !== 0) {
       var enderjs = cache.splice(enderPos,1);
-      cache.unshift(enderjs);
+      cache.unshift(enderjs[0]);
     }
     // funky _.without args require funkiness
     var args = _.pluck(cache,"name");
     args.unshift(enderReads.jeesh);
+    var unusedJeesh = _.without.apply(null,args);
     // get the size too, nice to know
     enderReads.getSize(function(size){
       res.render("index",{
@@ -39,9 +39,10 @@ app.get("/",function(req,res){
           modules: cache,
           directory: process.cwd(),
           size: size,
-          unusedJeesh: _.without.apply(null,args).map(function(name){
-            return { name: name }
-          })
+          unusedJeesh: unusedJeesh.map(function(n){ return {name:n} }),
+          jeeshNotice: (unusedJeesh.length) ?
+            "Some of the jeesh are not in your build... Click one to add one!" :
+            "All the jeesh are in the build."
         }
       });
     });

@@ -88,6 +88,17 @@ function buildEntry(template,prefix,record,extraClass) {
   });
 }
 
+// loading two enders appears to break all these functions
+var hasClass = function(el,className) {
+    return el[0].className.indexOf(className) >= 0;
+  },
+  removeClass = function(el,className) {
+    el[0].className = el[0].className.replace(className,"");
+  },
+  toggleClass = function(el,cName) {
+    hasClass(el,cName) ? removeClass(el,cName) : el.addClass(cName);
+  };
+
 MONEY.domReady(function(){
   var functions = MONEY("#functions"),
     template = MONEY.template(MONEY("#template")[0].innerHTML),
@@ -101,20 +112,7 @@ MONEY.domReady(function(){
     MONEY.map(funcs.proto,MONEY.bind(build,null,'$("").')).join("")
   ].join(""));
   
-  var funcItems = functions.find("span.fn strong");
-  
   doHijs(); // syntax highlighting
-  
-  // loading two enders appears to break all these functions
-  var hasClass = function(el,className) {
-      return el[0].className.indexOf(className) >= 0;
-    },
-    removeClass = function(el,className) {
-      el[0].className = el[0].className.replace(className,"");
-    },
-    toggleClass = function(el,cName) {
-      hasClass(el,cName) ? removeClass(el,cName) : el.addClass(cName);
-    };
   
   // accordion stuff
   MONEY("span.fn").click(function(e){
@@ -123,7 +121,7 @@ MONEY.domReady(function(){
     toggleClass(src,"open");
   });
   
-  // livesearching
+  // nice input behavior
   MONEY("input")
     .focus(function(){
       MONEY(this).addClass("typing");
@@ -137,6 +135,10 @@ MONEY.domReady(function(){
         this.className = "";
       }
     })
+  
+  // livesearching
+  var funcItems = functions.find("span.fn strong");
+  MONEY("input#livesearch")
     .keyup(function(){
       var search = this.value.toLowerCase();
       // run through and hide what doesn't match
@@ -148,11 +150,24 @@ MONEY.domReady(function(){
     });
   
   // so you want to add a module?
-  // (this is the hackiest thing here, will get much better)
+  var moduleScreen = MONEY("#add-popup");
   MONEY("#add-a-module").click(function(){
-    var module = prompt("... what do you want to add?");
-    if(module) {
-      window.location.href = "/add/"+module;
+    moduleScreen.css("visibility","visible");
+  });
+  // get rid of the popover if you click anywhere other than the main box
+  moduleScreen.click(function(e){
+    if(e.srcElement == this) {
+      moduleScreen.css("visibility","hidden");
+    }
+  });
+  // code for adding an arbitrary module
+  var arbitrary = MONEY("#arbitrary")[0];
+  // capture the submit event, redirect as link
+  MONEY("#add-form form").submit(function(e){
+    e.preventDefault();
+    var value = arbitrary.value;
+    if(value) {
+      window.location.href = "/add/"+value;
     }
   });
 });
