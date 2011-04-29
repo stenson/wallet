@@ -2,7 +2,7 @@ var express = require("express"),
   colors = require("colors"),
   enderReads = require("./read"),
   exec = require("child_process").exec,
-  _ = require("underscore")._,
+  // the default port for wallet
   port = 8083;
 
 // run an ender command via the ender cli
@@ -19,6 +19,18 @@ function processCommand(verb,req,res) {
   }
 }
 
+function pluck(arr,key) {
+  return arr.map(function(t){ return t[key] });
+}
+
+function without(arr,without) {
+  return arr.filter(function(x){
+    return !without.some(function(y){
+      return x == y;
+    });
+  });
+}
+
 function serveWallet(req,res) {
   enderReads.read(function(scripts){
     var enderPos = 0,
@@ -33,10 +45,7 @@ function serveWallet(req,res) {
       var enderjs = cache.splice(enderPos,1);
       cache.unshift(enderjs[0]);
     }
-    // funky _.without args require funkiness
-    var args = _.pluck(cache,"name");
-    args.unshift(enderReads.jeesh);
-    var unusedJeesh = _.without.apply(null,args);
+    var unusedJeesh = without(enderReads.jeesh,pluck(cache,"name"));
     // get the size too, nice to know
     enderReads.getSize(function(size){
       res.render("index",{
@@ -77,5 +86,7 @@ function run(_port) {
 }
 
 module.exports = {
-  run: run
+  exec: function(cmd) {
+    run();
+  }
 };
