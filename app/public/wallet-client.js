@@ -22,8 +22,9 @@ var introspect = (function(){
       //   mostRecent = scripts[scripts.length-2],
       //   code = mostRecent.innerHTML;
       // need something with a __proto__
+      var testEl = $("div");
       if(!testProto) {
-        testProto = $("div").__proto__;
+        testProto = $._VERSION ? testEl : testEl.__proto__;
       }
       // first the top-level
       for(var f in $) {
@@ -33,7 +34,7 @@ var introspect = (function(){
       }
       // then the prototype of an element
       for(var p in testProto) {
-        if(!(p in annotated.proto)) {
+        if(!(p in annotated.proto) && !isFinite(p)) {
           annotated.proto[p] = record(owner,testProto[p],p);
         }
       }
