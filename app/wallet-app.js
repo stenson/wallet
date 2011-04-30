@@ -78,11 +78,17 @@ function run(_port) {
   // not appropriate http verbs but, like... whatever
   app.get("/add/:module",processCommand.bind(null,"add"));
   app.get("/remove/:module",processCommand.bind(null,"remove"));
-  // set it loose!
-  app.listen(p);
-  // let them know
-  var greeting = "Howdy! See what's in yer $ at localhost:"+p+"";
-  console.log(greeting.underline.green);
+  // set it loose if there's any ender around
+  enderReads.checkEnderExistence(function(exists){
+    if(exists) {
+      app.listen(p);
+      var greeting = "Howdy! See what's in yer $ at localhost:"+p+"";
+      console.log(greeting.underline.green);
+    }
+    else {
+      console.log("there's no ender here. gotta have a $ to look inside.".red);
+    }
+  });
 }
 
 module.exports = {

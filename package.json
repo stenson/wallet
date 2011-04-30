@@ -1,0 +1,20 @@
+{
+  "name": "ender-wallet",
+  "description": "see what's inside your ender $",
+  "version": "0.0.1",
+  "authors": ["Rob Stenson <@blickwickle>"],
+  "keywords": ["ender", "api", "visual", "app"],
+  "main": "./wallet.js",
+  "homepage": "https://github.com/stenson/wallet",
+  "engines": {
+    "node": ">= 0.4.0"
+  },
+  "dependencies": {
+    "ender": ">= 0.2.0",
+    "colors": ">= 0.3.0",
+    "express": ">= 0.3.0"
+  },
+  "bin": {
+    "ender-wallet": "./bin/ender-wallet"
+  }
+}

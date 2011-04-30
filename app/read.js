@@ -72,6 +72,9 @@ module.exports = {
       });
     });
   },
+  checkEnderExistence: function(callback) {
+    path.exists('./ender.js',callback);
+  },
   getSize: function(callback) {
     ender.file.enderSize(function(size){
       callback(((Math.round((size/1024) * 10) / 10)));
