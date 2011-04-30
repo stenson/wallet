@@ -7,7 +7,6 @@ var introspect = (function(){
       proto: {} // functions on the prototype
     },
     codes = {},
-    testProto = null,
     funcs = {}, // final records, written by cull
     record = function(owner,func,name) {
       return {
@@ -18,14 +17,8 @@ var introspect = (function(){
   
   return {
     diff: function(owner) {
-      // var scripts = document.getElementsByTagName("script"),
-      //   mostRecent = scripts[scripts.length-2],
-      //   code = mostRecent.innerHTML;
-      // need something with a __proto__
-      var testEl = $("div");
-      if(!testProto) {
+      var testEl = $("div"),
         testProto = $._VERSION ? testEl : testEl.__proto__;
-      }
       // first the top-level
       for(var f in $) {
         if(!(f in annotated.top)) {
