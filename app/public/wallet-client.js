@@ -4,7 +4,7 @@ var introspect = (function(){
   
   var annotated = {
       top: {}, // top-level functions
-      proto: {} // functions on the prototype
+      selection: {} // functions on the returned selection
     },
     codes = {},
     funcs = {}, // final records, written by cull
@@ -18,17 +18,17 @@ var introspect = (function(){
   return {
     diff: function(owner) {
       var testEl = $("div"),
-        testProto = $._VERSION ? testEl : testEl.__proto__;
+        testResult = $._VERSION ? testEl : testEl.__proto__;
       // first the top-level
       for(var f in $) {
         if(!(f in annotated.top)) {
           annotated.top[f] = record(owner,$[f],f);
         }
       }
-      // then the prototype of an element
-      for(var p in testProto) {
-        if(!(p in annotated.proto) && !isFinite(p)) {
-          annotated.proto[p] = record(owner,testProto[p],p);
+      // then the functions of a returned selection
+      for(var p in testResult) {
+        if(!(p in annotated.selection) && !isFinite(p)) {
+          annotated.selection[p] = record(owner,testResult[p],p);
         }
       }
     },
@@ -47,7 +47,7 @@ var introspect = (function(){
         return read;
       });
       // save 'em
-      funcs = { top: ok[0], proto: ok[1] };
+      funcs = { top: ok[0], selection: ok[1] };
     },
     alphabetize: function(list) {
       return list.sort(function(a,b){
@@ -57,7 +57,7 @@ var introspect = (function(){
     funcs: function() {
       return {
         top: introspect.alphabetize(funcs.top),
-        proto: introspect.alphabetize(funcs.proto)
+        selection: introspect.alphabetize(funcs.selection)
       };
     },
     codes: function() {
@@ -102,8 +102,8 @@ MONEY.domReady(function(){
   functions.html([
     build("",{ name: "top-level functions" },"notice"),
     MONEY.map(funcs.top,MONEY.bind(build,null,"$.")).join(""),
-    build("",{ name: "functions on the prototype" },"notice"),
-    MONEY.map(funcs.proto,MONEY.bind(build,null,'$("").')).join("")
+    build("",{ name: "functions on a returned selection" },"notice"),
+    MONEY.map(funcs.selection,MONEY.bind(build,null,'$("").')).join("")
   ].join(""));
   
   doHijs(); // syntax highlighting
