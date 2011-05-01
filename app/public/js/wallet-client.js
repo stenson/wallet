@@ -52,7 +52,7 @@
 
   function inlineDocumentation() {
     // accordion stuff
-    MONEY("span.fn").click(function(e){
+    MONEY("span.fn").click(function(){
       var src = MONEY(this);
       toggleClass(src.next("div.info"),"visible");
       toggleClass(src,"open");
