@@ -6,9 +6,9 @@ See what's inside of your ender $
 
 __To install:__
 
-    npm install ender-wallet
+    npm install ender-wallet -g
 
-Easy.
+Easy. If you're using an npm < 1.0, you can leave off the -g.
 
 __To run:__
 
