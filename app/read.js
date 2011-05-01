@@ -18,6 +18,7 @@ var fs = require("fs"),
 function processPackages(packages,_isAsync,callback) {
   var _sync = [], _async = [], _asyncBridges = [], i = 0;
   packages.forEach(function (name) {
+    if(!name) return;
     var location = path.join('node_modules', name, 'package.json');
     fs.readFile(location, 'utf-8', function (err, data) {
       if (err) throw err;
@@ -65,6 +66,9 @@ module.exports = {
       var packs = packages.split(" ").slice(2);
       if(packs[0] === "jeesh") {
         packs = ender.jeesh;
+      }
+      if(packs[0] == "") {
+        packs = [];
       }
       packs.unshift("ender-js");
       processPackages(packs,false,function(scripts){

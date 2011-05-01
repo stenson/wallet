@@ -3,13 +3,15 @@ var express = require("express"),
   enderReads = require("./read"),
   exec = require("child_process").exec,
   // the default port for wallet
-  port = 8083;
+  port = 8083,
+  noPackages = false; // are there no packages installed?
 
 // run an ender command via the ender cli
 function processCommand(verb,req,res) {
   var module = req.params.module;
   if(module) {
     exec("ender "+verb+" "+module,function(err,data,stderr){
+      if(err) throw err;
       // not handling the error, we'll see what happens
       res.redirect("/");
     });
@@ -40,6 +42,8 @@ function serveWallet(req,res) {
         if(info.name == "ender-js") enderPos = i;
         return info;
       });
+    // update global state, little bit hacky
+    noPackages = cache.length <= 1;
     // need to make sure ender-js shows up first
     if(enderPos !== 0) {
       var enderjs = cache.splice(enderPos,1);
@@ -64,8 +68,9 @@ function serveWallet(req,res) {
 }
 
 function run(_port) {
-  var p = _port || port;
-  var app = express.createServer();
+  var p = _port || port,
+    app = express.createServer(),
+    packages = [];
   // stache enabling
   app.set('view engine', 'mustache');
   app.set("views", __dirname + '/views');
@@ -76,7 +81,10 @@ function run(_port) {
   app.get("/",serveWallet);
   // ajax routes for ender commands
   // not appropriate http verbs but, like... whatever
-  app.get("/add/:module",processCommand.bind(null,"add"));
+  app.get("/add/:module",function(req,res){
+    var verb = (noPackages) ? "build" : "add";
+    processCommand(verb,req,res);
+  });
   app.get("/remove/:module",processCommand.bind(null,"remove"));
   // set it loose if there's any ender around
   enderReads.checkEnderExistence(function(exists){

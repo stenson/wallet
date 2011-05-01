@@ -17,8 +17,6 @@ var introspect = (function(){
   
   return {
     diff: function(owner) {
-      var testEl = $("div"),
-        testResult = $._VERSION ? testEl : testEl.__proto__;
       // first the top-level
       for(var f in $) {
         if(!(f in annotated.top)) {
@@ -26,9 +24,12 @@ var introspect = (function(){
         }
       }
       // then the functions of a returned selection
-      for(var p in testResult) {
+      var testEl = $("div"),
+        selection = (testEl.__proto__.length > 0) ? testEl.__proto__ : testEl;
+      var selection = $("div");
+      for(var p in selection) {
         if(!(p in annotated.selection) && !isFinite(p)) {
-          annotated.selection[p] = record(owner,testResult[p],p);
+          annotated.selection[p] = record(owner,selection[p],p);
         }
       }
     },
