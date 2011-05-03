@@ -33,7 +33,8 @@
 </div>
 <div id="functions-container">
   <div id="searchbox">
-    <input type="text" id="livesearch" value="Search those functions"/>
+    <input type="text" id="livesearch" value="Search functions by function name"/>
+    <input type="text" id="search-by-module" value="Search functions by module name"/>
   </div>
   <h3 id="size">
     Size: {{ size }}kb
@@ -43,21 +44,6 @@
     <span class="directory">{{ directory }}</span>
   </div>
   <div id="function-scroller">
-    <!-- template for rendering a function list item -->
-    <script type="text/ender-template" id="template">
-      <li>
-        <span class="<%= extraClass %>">
-          <em class="money"><%= prefix %></em>
-          <strong><%= name %> <%= aliases %></strong>
-        </span>
-        <div class="info">
-          <div class="docs">
-            <span class="owner"><%= owner %></span>
-          </div>
-          <pre><code><%= func %></code></pre>
-        </div>
-      </li>
-    </script>
     <ul id="functions">
     </ul>
   </div>

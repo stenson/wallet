@@ -64,13 +64,15 @@ module.exports = {
   read: function(callback) {
     ender.get.buildHistory(function(packages){
       var packs = packages.split(" ").slice(2);
-      if(packs[0] === "jeesh") {
+      if(packs[0] == "jeesh") {
         packs = ender.jeesh;
       }
       if(packs[0] == "") {
         packs = [];
       }
-      packs.unshift("ender-js");
+      if(packs[0] != "ender-js") {
+        packs.unshift("ender-js");
+      }
       processPackages(packs,false,function(scripts){
         callback(scripts);
       });

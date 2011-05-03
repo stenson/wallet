@@ -1,15 +1,49 @@
 // code for displaying stuff
 (function(){
-
-  function buildEntry(template,prefix,record,extraClass) {
-    var als = record.aliases || [];
-    return template({
-      prefix: prefix,
-      aliases: (als.length) ? "<em>aka</em> "+als.join(" <em>&amp;</em> ") : "",
-      name: record.name,
-      func: record.func,
-      owner: record.owner,
-      extraClass: MONEY.isString(extraClass) ? extraClass : "fn"
+  
+  var buildEntry = cabin(function(o,prefix,record){
+    var fullname = (record.aliases.length) ?
+      zippedAka(record.name,record.aliases) :
+      o("strong",record.name);
+    
+    return true,
+      o("li",
+        o("span.fn",
+          o("em",prefix),
+          o("strong",fullname)
+        ),
+        o("div.info",
+          o("div.docs",
+            o("span.owner",record.owner)
+          ),
+          o("pre",
+            o("code",record.func||"")
+          )
+        )
+      );
+  });
+  
+  // hmm... this could be nicer... pretty fugly
+  var zippedAka = cabin(function(o,name,aliases){
+    var rest = [o("em"," aka ")];
+    for(var i = 0, l = aliases.length; i < l; i++) {
+      rest.push(o("text",aliases[i]));
+      if(i+1 < l) rest.push(o("em"," || "));
+    }
+    return o.apply(null,["strong",o("text",name)].concat(rest));
+  });
+  
+  var buildNotice = cabin(function(o,text){
+    return o("li",o("span.notice",text));
+  });
+  
+  function search(input,items,conditionFn) {
+    input.keyup(function(){
+      var search = this.value.toLowerCase();
+      // run through and hide what doesn't match
+      MONEY.each(items,function(item){
+        item.el.style.display = (conditionFn(item)) ? "block" : "none";
+      });
     });
   }
 
@@ -28,24 +62,40 @@
 
   MONEY.domReady(function(){
   
-    var functions = MONEY("#functions"),
-      template = MONEY.template(MONEY("#template")[0].innerHTML),
-      funcs = introspect.funcs(),
-      build = MONEY.bind(buildEntry,null,template);
-  
-    // add function li's to the dom
-    functions.html([
-      build("",{ name: "top-level functions" },"notice"),
-      MONEY.map(funcs.top,MONEY.bind(build,null,"$.")).join(""),
-      build("",{ name: "functions on a returned selection" },"notice"),
-      MONEY.map(funcs.selection,MONEY.bind(build,null,'$("").')).join("")
-    ].join(""));
+    var functions = MONEY("#functions")
+      , funcs = introspect.funcs()
+      , els = [] // the lis gone end up in the list
+      , buildMap = function(_funcs,buildFn) {
+          MONEY.map(_funcs,function(fn){
+            var el = buildFn(fn);
+            els.push(el);
+            fn.el = el;
+          });
+        };
+    
+    // push the top-level functions
+    els.push(buildNotice("top-level functions"));
+    buildMap(funcs.top, $.bind(buildEntry,null,"$."));
+    // push the selection-level functions
+    els.push(buildNotice("functions on a returned selection"));
+    buildMap(funcs.selection, $.bind(buildEntry,null,'$("").'));
+    // add the els to the dom tree
+    functions[0].appendChild(cabin.o.listFragment(els));
   
     doHijs(); // syntax highlighting
     inlineDocumentation();
     responsiveForms();
-    addLivesearch(functions);
     moduleAddition();
+    
+    var searchables = funcs.top.concat(funcs.selection);
+    // by function name
+    addLivesearch(MONEY("#livesearch"),searchables,function(rec,str){
+      return rec.name.toLowerCase().indexOf(str) >= 0;
+    });
+    // by module owner name
+    addLivesearch(MONEY("#search-by-module"),searchables,function(rec,str){
+      return rec.owner.toLowerCase().indexOf(str) >= 0;
+    });
   });
   
   // functions for cleaning up main ondomready function
@@ -76,19 +126,13 @@
       })
   }
 
-  function addLivesearch(functions) {
-    // livesearching
-    var funcItems = functions.find("span.fn strong");
-    MONEY("input#livesearch")
-      .keyup(function(){
-        var search = this.value.toLowerCase();
-        // run through and hide what doesn't match
-        MONEY.each(funcItems,function(func){
-          var show = func.innerHTML.toLowerCase().indexOf(search) >= 0,
-            parent = func.parentNode.parentNode;
-          parent.style.display = (show) ? "block" : "none";
-        });
+  function addLivesearch(el,listing,comparison) {
+    el.keyup(function(){
+      var search = this.value.toLowerCase();
+      MONEY.each(listing,function(func){
+        func.el.style.display = (comparison(func,search)) ? "block" : "none";
       });
+    });
   }
 
   function moduleAddition() {

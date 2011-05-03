@@ -11,8 +11,7 @@ function processCommand(verb,req,res) {
   var module = req.params.module;
   if(module) {
     exec("ender "+verb+" "+module,function(err,data,stderr){
-      if(err) throw err;
-      // not handling the error, we'll see what happens
+      if(err) console.log("ERROR".red,err);
       res.redirect("/");
     });
   }
