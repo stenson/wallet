@@ -15,7 +15,7 @@
   }
 
   function boosh(s, r) {
-    var els = typeof s !== 'string' && !s.nodeType && typeof s.length !== 'undefined' ? s : ender._select(s, r);
+    var els = typeof s !== 'string' && !s.nodeType && isFinite(s.length) ? s : ender._select(s, r);
     els.selector = s;
     return aug(els, boosh);
   }
@@ -25,7 +25,7 @@
   }
 
   aug(ender, {
-    _VERSION: '0.1.5',
+    _VERSION: '0.1.6',
     ender: function (o, chain) {
       aug(chain ? boosh : ender, o);
     },
@@ -214,7 +214,7 @@
     if (isNode(selector)) {
       return !_root || (isNode(root) && isAncestor(selector, root)) ? [selector] : [];
     }
-    if (selector && typeof selector === 'object' && selector.length && isFinite(selector.length)) {
+    if (selector && typeof selector === 'object' && isFinite(selector.length)) {
       return array(selector);
     }
     if (m = selector.match(idOnly)) {

@@ -1,1 +1,4 @@
 /node_modules
+/test/node_modules
+/test/ender.js
+/test/ender.min.js
