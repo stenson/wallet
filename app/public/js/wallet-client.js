@@ -87,15 +87,17 @@
     responsiveForms();
     moduleAddition();
     
-    var searchables = funcs.top.concat(funcs.selection);
+    var searchables = funcs.top.concat(funcs.selection)
+      , byName = MONEY("#namesearch")
+      , byModule = MONEY("#modulesearch");
     // by function name
-    addLivesearch(MONEY("#livesearch"),searchables,function(rec,str){
-      return rec.name.toLowerCase().indexOf(str) >= 0;
-    });
+    addLivesearch(byName,searchables,function(rec,str){
+      return (rec.name + rec.aliases.join("")).toLowerCase().indexOf(str) >= 0;
+    },[byModule]);
     // by module owner name
-    addLivesearch(MONEY("#search-by-module"),searchables,function(rec,str){
+    addLivesearch(byModule,searchables,function(rec,str){
       return rec.owner.toLowerCase().indexOf(str) >= 0;
-    });
+    },[byName]);
   });
   
   // functions for cleaning up main ondomready function
@@ -126,11 +128,18 @@
       })
   }
 
-  function addLivesearch(el,listing,comparison) {
+  function addLivesearch(el,listing,comparison,toClear) {
     el.keyup(function(){
       var search = this.value.toLowerCase();
       MONEY.each(listing,function(func){
         func.el.style.display = (comparison(func,search)) ? "block" : "none";
+      });
+    });
+    el.mousedown(function(){
+      MONEY.each(toClear,function(elm){
+        elm[0].value = "";
+        elm.trigger("keyup");
+        elm.trigger("blur");
       });
     });
   }

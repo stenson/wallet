@@ -215,7 +215,7 @@ a.delete.ender-js {
 
 #size {
    position:absolute;
-   top:155px;
+   top:25%;
    left:30px;
    font-size:24px;
    color:#555;
@@ -223,11 +223,12 @@ a.delete.ender-js {
 
 #searchbox {
    position:absolute;
-   top:75px;
+   top:10%;
    left:25px;
 }
 
-#livesearch,
+#namesearch,
+#modulesearch,
 #arbitrary {
    font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
    color:#ccc;
@@ -235,10 +236,17 @@ a.delete.ender-js {
    font-size:16px;
    font-weight:bold;
    width:300px;
+   display:block;
 }
-#livesearch.typing,
+#namesearch.typing,
+#modulesearch.typing,
 #arbitrary.typing {
    color:#555;
+}
+
+#modulesearch {
+  display:block;
+  margin-top:5px;
 }
 
 #arbitrary {

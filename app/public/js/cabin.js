@@ -42,14 +42,6 @@ var cabin = (function(){
     return el;
   };
   
-  o.parallelize = function(entries,template) {
-    var fragment = doc.createDocumentFragment();
-    for(var i = 0, l = entries.length; i < l; i++) {
-      fragment.appendChild(template(entries[i]));
-    }
-    return fragment;
-  };
-  
   o.listFragment = function(entries) {
     var fragment = doc.createDocumentFragment();
     for(var i = 0, l = entries.length; i < l; i++) {
