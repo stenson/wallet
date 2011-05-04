@@ -42,7 +42,7 @@ var cabin = (function(){
     return el;
   };
   
-  o.listFragment = function(entries) {
+  o.list = function(entries) {
     var fragment = doc.createDocumentFragment();
     for(var i = 0, l = entries.length; i < l; i++) {
       fragment.appendChild(entries[i]);

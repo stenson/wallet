@@ -13,6 +13,9 @@ var introspect = (function(){
         owner: owner, func: func,
         aliases: [], name: name
       }
+    },
+    stubSelect = function(selector,root) {
+      return (root || document).querySelectorAll(selector);
     };
   
   return {
@@ -24,13 +27,20 @@ var introspect = (function(){
         }
       }
       // then the functions of a returned selection
+      // (gone need a selector if we ain't got none)
+      if(!$._select) {
+        $._select = stubSelect;
+      }
       var testEl = $("div"),
         selection = (testEl.__proto__.length > 0) ? testEl.__proto__ : testEl;
-      var selection = $("div");
       for(var p in selection) {
         if(!(p in annotated.selection) && !isFinite(p)) {
           annotated.selection[p] = record(owner,selection[p],p);
         }
+      }
+      // if we added a stub, get it gone
+      if($._select == stubSelect) {
+        delete $._select;
       }
     },
     cull: function() {

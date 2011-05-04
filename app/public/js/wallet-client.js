@@ -38,35 +38,36 @@
   });
   
   function search(input,items,conditionFn) {
-    input.keyup(function(){
-      var search = this.value.toLowerCase();
+    var l = items.length;
+    input.addEventListener(function(){
+      var search = input.value.toLowerCase();
       // run through and hide what doesn't match
-      MONEY.each(items,function(item){
+      for(var i = 0; i < l; i++) {
+        var item = items[i];
         item.el.style.display = (conditionFn(item)) ? "block" : "none";
-      });
-    });
+      }
+    },false);
   }
-
-  // loading two enders appears to break all these functions
-  var hasClass = function(el,className) {
-      return el[0].className.indexOf(className) >= 0;
-    },
-    removeClass = function(el,className) {
-      el[0].className = el[0].className.replace(className,"");
-    },
-    toggleClass = function(el,cName) {
-      hasClass(el,cName) ? removeClass(el,cName) : el.addClass(cName);
-    };
+  
+  var byId = document.getElementById.bind(document)
+      // some other helpful functions
+    , hasClass = function(el,className) {
+        return el[0].className.indexOf(className) >= 0;
+      }
+    , removeClass = function(el,className) {
+        el[0].className = el[0].className.replace(className,"");
+      }
+    , toggleClass = function(el,cName) {
+        hasClass(el,cName) ? removeClass(el,cName) : el.addClass(cName);
+      };
 
   // main function
-
-  MONEY.domReady(function(){
-  
-    var functions = MONEY("#functions")
+  (function() {
+    var functions = byId("functions")
       , funcs = introspect.funcs()
       , els = [] // the lis gone end up in the list
       , buildMap = function(_funcs,buildFn) {
-          MONEY.map(_funcs,function(fn){
+          _funcs.forEach(function(fn){
             var el = buildFn(fn);
             els.push(el);
             fn.el = el;
@@ -75,12 +76,12 @@
     
     // push the top-level functions
     els.push(buildNotice("top-level functions"));
-    buildMap(funcs.top, $.bind(buildEntry,null,"$."));
+    buildMap(funcs.top, MONEY.bind(buildEntry,null,"$."));
     // push the selection-level functions
     els.push(buildNotice("functions on a returned selection"));
-    buildMap(funcs.selection, $.bind(buildEntry,null,'$("").'));
+    buildMap(funcs.selection, MONEY.bind(buildEntry,null,'$("").'));
     // add the els to the dom tree
-    functions[0].appendChild(cabin.o.listFragment(els));
+    functions.appendChild(cabin.o.list(els));
   
     doHijs(); // syntax highlighting
     inlineDocumentation();
@@ -98,7 +99,7 @@
     addLivesearch(byModule,searchables,function(rec,str){
       return rec.owner.toLowerCase().indexOf(str) >= 0;
     },[byName]);
-  });
+  })();
   
   // functions for cleaning up main ondomready function
 
