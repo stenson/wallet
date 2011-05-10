@@ -4,9 +4,6 @@ Wallet
 See what's inside of your ender $
 -------
 
-//// Currently does not work with most recent ender, b/c of new dependencies management --- fixes are in the works.
--------
-
 __To install:__
 
     npm install ender-wallet -g
@@ -24,3 +21,8 @@ Then hit localhost 8083 (in webkit||firefox) and you'll see what inside's your e
 To convince you to try it, here's a screenshot:
 
 <img src="https://github.com/stenson/wallet/raw/master/app/screenshot.png"/>
+
+Note:
+----
+
+Since Ender is purty young and this project is even younger, both are liable to change alot, and probably ender-wallet will break alot. So make sure your Ender is as fresh as possible.
