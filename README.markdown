@@ -4,6 +4,9 @@ Wallet
 See what's inside of your ender $
 -------
 
+//// Currently does not work with most recent ender, b/c of new dependencies management --- fixes are in the works.
+-------
+
 __To install:__
 
     npm install ender-wallet -g
