@@ -69,11 +69,8 @@ function processPackages(_packages, context, callback) {
 
 module.exports = {
   read: function(callback) {
-    ender.get.buildHistory(function(packages){
+    ender.get.buildHistory(null,function(packages){
       var packs = packages.split(" ").slice(2);
-      // // if(packs[0] == "jeesh") {
-      // //   packs = ender.jeesh;
-      // // }
       if(packs[0] == "") {
         packs = [];
       }
@@ -89,7 +86,7 @@ module.exports = {
     path.exists('./ender.js',callback);
   },
   getSize: function(callback) {
-    ender.file.enderSize(function(size){
+    ender.file.enderSize(null,function(size){
       callback(((Math.round((size/1024) * 10) / 10)));
     });
   }//,

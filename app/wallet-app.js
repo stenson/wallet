@@ -48,18 +48,13 @@ function serveWallet(req,res) {
       var enderjs = cache.splice(enderPos,1);
       cache.unshift(enderjs[0]);
     }
-    //var unusedJeesh = without(enderReads.jeesh,pluck(cache,"name"));
     // get the size too, nice to know
     enderReads.getSize(function(size){
       res.render("index",{
         locals: {
           modules: cache,
           directory: process.cwd(),
-          size: size//,
-          //unusedJeesh: unusedJeesh.map(function(n){ return {name:n} }),
-          //jeeshNotice: (unusedJeesh.length) ?
-          //  "Some of the jeesh are not in your build... Click one to add one!" :
-          //  "All the jeesh are in the build."
+          size: size
         }
       });
     });
