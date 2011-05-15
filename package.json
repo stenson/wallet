@@ -10,7 +10,7 @@
     "node": ">= 0.4.1"
   },
   "dependencies": {
-    "ender": ">= 0.2.0",
+    "ender": ">= 0.3.5",
     "colors": ">= 0.3.0",
     "express": ">= 0.3.0",
     "stache": ">= 0.0.2"
