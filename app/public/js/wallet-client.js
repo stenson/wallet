@@ -111,8 +111,9 @@
         , depender = e[0]
         , on = e[1];
       MONEY.each(on,function(o){
-        var li = MONEY("#"+o).addClass("depended")[0];
-        modules.appendChild(li);
+        var $li = MONEY("#"+o).addClass("depended");
+        $li.append(cabin.o("p.depender","Depended on by "+depender));
+        modules.appendChild($li[0]);
       });
     }
   }
