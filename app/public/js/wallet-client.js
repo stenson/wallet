@@ -82,7 +82,8 @@
     buildMap(funcs.selection, MONEY.bind(buildEntry,null,'$("").'));
     // add the els to the dom tree
     functions.appendChild(cabin.o.list(els));
-  
+    
+    annotateDependencies(introspect.dependencies());
     doHijs(); // syntax highlighting
     inlineDocumentation();
     responsiveForms();
@@ -102,6 +103,19 @@
   })();
   
   // functions for cleaning up main ondomready function
+
+  function annotateDependencies(deps) {
+    var ul = document.getElementById("modules");
+    for(var i = 0, l = deps.length; i < l; i++) {
+      var e = deps[i]
+        , depender = e[0]
+        , on = e[1];
+      MONEY.each(on,function(o){
+        var li = MONEY("#"+o).addClass("depended")[0];
+        modules.appendChild(li);
+      });
+    }
+  }
 
   function inlineDocumentation() {
     // accordion stuff
