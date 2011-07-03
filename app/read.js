@@ -14,12 +14,10 @@ var fs = require("fs"),
   FILE = ender.file,
   UTIL = ender.util
 
-// had to copy the whole thing to get the names associated with scripts
-function processPackages(_packages, context, callback) {
+function processPackages(_packages, options, callback) {
   var result = [], i = 0;
   FILE.constructDependencyTree(_packages, 'node_modules', function (tree) {
     FILE.flattenDependencyTree(tree, null, function (packages) {
-      packages = UTIL.unique(packages);
       packages.forEach(function (name, j) {
         var packagePath = path.join('node_modules', name.replace(/\//g, '/node_modules/'))
           , location = path.join(packagePath, 'package.json');
@@ -32,7 +30,7 @@ function processPackages(_packages, context, callback) {
             return;
           }
           fs.readFile(location, 'utf-8', function (err, data) {
-            if (err) throw err;
+            if (err) return console.log('something whent wrong trying to read ' + location);
             var packageJSON = JSON.parse(data)
             , source;
             //CONSTRUCT MAIN SOURCE FILE
@@ -44,19 +42,20 @@ function processPackages(_packages, context, callback) {
             FILE.constructSource(packagePath, packageJSON.main, function (source) {
               //CONSTRUCT BRIDGE
               FILE.constructBridge(packagePath, packageJSON.ender, function (content) {
-                if (name == 'ender-js') {
-                  source = FILE.processComment(source, context);
-                } else {
-                  if (!packageJSON.ender) {
-                    source = commonJSBridge.head + source + commonJSBridge.foot;
-                  } else if (packageJSON.ender != 'noop'){
-                    source += content;
-                  }
+                if (source && name !== 'ender-js' && !options.noop) {
+                  source = [
+                      commonJSBridge.head
+                    , source.replace(/\n/g, '\n  ')
+                    , 'provide("' + name.replace(/.*(?=\/)\//, '') + '", module.exports);'
+                  ];
+                  if (packageJSON.ender) source.push(content.replace(/\n/g, '\n  '));
+                  else source.push('$.ender(module.exports);')
+                  source = source.join('\n\n  ') + '\n\n}();';
                 }
-                // the one modified line
+                //result[j] = source;
                 result[j] = [name,source,packageJSON];
                 if (packages.length == ++i) {
-                   callback && callback(result);
+                  callback && callback(result);
                 }
               });
             });
