@@ -1,7 +1,7 @@
 {
   "name": "ender-wallet",
   "description": "see what's inside your ender $",
-  "version": "0.0.9",
+  "version": "0.1.0",
   "authors": ["Rob Stenson <@blickwickle>"],
   "keywords": ["ender", "api", "visual", "app"],
   "main": "./wallet.js",
