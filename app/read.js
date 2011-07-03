@@ -6,13 +6,12 @@ var fs = require("fs"),
     get: require("ender/lib/ender.get"),
     file: require("ender/lib/ender.file"),
     util: require("ender/lib/ender.util")
-    //jeesh: require("ender/lib/ender.jeesh")
   },
   // borrowed from ender
   commonJSBridge = { head: '!function () { var exports = {}, module = { exports: exports }; '
                    , foot: ' $.ender(module.exports); }();' },
-  FILE = ender.file,
-  UTIL = ender.util
+  FILE = ender.file, // aliases for the processPackages function
+  UTIL = ender.util // which is ripped from the ender CLI source
 
 function processPackages(_packages, options, callback) {
   var result = [], i = 0;
@@ -88,6 +87,5 @@ module.exports = {
     ender.file.enderSize(null,function(size){
       callback(((Math.round((size/1024) * 10) / 10)));
     });
-  }//,
-  //jeesh: ender.jeesh
+  }
 }

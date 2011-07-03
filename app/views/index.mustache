@@ -6,7 +6,7 @@
     </div>
     <ul id="modules">
     {{#modules}}
-      <li>
+      <li id="{{ name }}">
         <div class="padding">
           <span class="name">{{ name }}</span>
           <span class="version">{{ version }}</span>
@@ -17,6 +17,7 @@
           <script>
             // check on what functions are new in the $ variable
             introspect.diff("{{ name }}");
+            introspect.addDependencies("{{ name}}","{{ deps }}");
           </script>
         </div>
       </li>

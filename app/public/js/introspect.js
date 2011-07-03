@@ -16,7 +16,8 @@ var introspect = (function(){
     },
     stubSelect = function(selector,root) {
       return (root || document).querySelectorAll(selector);
-    };
+    },
+    dependencies = [];
   
   return {
     diff: function(owner) {
@@ -42,6 +43,9 @@ var introspect = (function(){
       if($._select == stubSelect) {
         delete $._select;
       }
+    },
+    addDependencies: function(owner,deps) {
+      if(deps) dependencies.push([owner,deps.split(";")]);
     },
     cull: function() {
       var ok = MONEY.map(annotated,function(hash,level){
@@ -74,6 +78,9 @@ var introspect = (function(){
     codes: function() {
       var parsedCodes = [];
       return codes;
+    },
+    dependencies: function() {
+      return dependencies;
     }
   }
   

@@ -16,7 +16,7 @@ function processCommand(verb,req,res) {
     });
   }
   else {
-    res.send("whoa, fail. alpha excuses");
+    res.send("whoa, fail. excuse: alpha!");
   }
 }
 
@@ -32,12 +32,21 @@ function without(arr,without) {
   });
 }
 
+function keys(o) {
+  var ks = [];
+  for(var k in o) {
+    if(o.hasOwnProperty(k)) ks.push(k);
+  }
+  return ks;
+}
+
 function serveWallet(req,res) {
   enderReads.read(function(scripts){
     var enderPos = 0,
       cache = scripts.map(function(script,i){
         var info = script[2];
         info.source = script[1];
+        info.deps = keys(info.dependencies).join(";");
         if(info.name == "ender-js") enderPos = i;
         return info;
       });
