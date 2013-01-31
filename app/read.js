@@ -1,5 +1,6 @@
 var fs = require("fs"),
   path = require('path'),
+  fs = require('fs'),
   colors = require("colors"),
   exec = require("child_process").exec,
   ender = {
@@ -15,12 +16,14 @@ var fs = require("fs"),
 
 function processPackages(_packages, options, callback) {
   var result = [], i = 0;
-  FILE.constructDependencyTree(_packages, 'node_modules', function (tree) {
-    FILE.flattenDependencyTree(tree, null, function (packages) {
+  
+  FILE.constructDependencyTree(_packages, 'node_modules', function (error, tree) {
+    FILE.flattenDependencyTree(tree, null, function (error, packages) {
       packages.forEach(function (name, j) {
+	    console.log(j)
         var packagePath = path.join('node_modules', name.replace(/\//g, '/node_modules/'))
           , location = path.join(packagePath, 'package.json');
-        path.exists(location, function (exists) {
+        fs.exists(location, function (exists) {
           if (!exists) {
             console.log('dependency ' + name.red + ' is currently not installed... for details check: ' + '$ ender info'.yellow);
             if (packages.length == ++i) {
@@ -38,9 +41,9 @@ function processPackages(_packages, options, callback) {
             } else if (typeof packageJSON.main == 'string') {
               packageJSON.main = [ packageJSON.main ];
             }
-            FILE.constructSource(packagePath, packageJSON.main, function (source) {
+            FILE.constructSource(packagePath, packageJSON.main, function (error, source) {
               //CONSTRUCT BRIDGE
-              FILE.constructBridge(packagePath, packageJSON.ender, function (content) {
+              FILE.constructBridge(packagePath, packageJSON.ender, function (error, content) {
                 if (source && name !== 'ender-js' && !options.noop) {
                   source = [
                       commonJSBridge.head
@@ -67,7 +70,7 @@ function processPackages(_packages, options, callback) {
 
 module.exports = {
   read: function(callback) {
-    ender.get.buildHistory(null,function(packages){
+    ender.get.buildHistory(null,function(error, packages){
       var packs = packages.split(" ").slice(2);
       if(packs[0] == "") {
         packs = [];
@@ -81,10 +84,10 @@ module.exports = {
     });
   },
   checkEnderExistence: function(callback) {
-    path.exists('./ender.js',callback);
+    fs.exists('./ender.js',callback);
   },
   getSize: function(callback) {
-    ender.file.enderSize(null,function(size){
+    ender.file.prettyPrintEnderSize(null,null, function(size){
       callback(((Math.round((size/1024) * 10) / 10)));
     });
   }
